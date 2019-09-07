@@ -12,7 +12,7 @@ const historyApiFallback = require('koa2-history-api-fallback')
 const koaRouter = require('koa-router')
 
 const app = new Koa()
-const port = parseInt(process.env.KOA_PORT) || 443
+const port = parseInt(process.env.PORT) || 443
 
 const router = koaRouter()
 
