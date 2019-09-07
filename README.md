@@ -2,9 +2,11 @@
 
 > 哈工大本科生 GPA 计算器。使用统一身份一键登录，即可计算自己的 GPA 信息。
 
+应用网址：https://hit-gpa.upupming.site
+
 测试结果：
 
-| hit-gpa                                                                                                | [chasedream GPA 计算器](https://apps.chasedream.com/gpa/#)                                             |
+| [hit-gpa](https://hit-gpa.upupming.site)                                                               | [chasedream GPA 计算器](https://apps.chasedream.com/gpa/#)                                             |
 | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | <img src="https://picgo-1256492673.cos.ap-chengdu.myqcloud.com/img/20190907172053.png" width="1000px"> | <img src="https://picgo-1256492673.cos.ap-chengdu.myqcloud.com/img/20190907172124.png" width="1000px"> |
 
