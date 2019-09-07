@@ -5,24 +5,45 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "node app.js",
+    "start:dev": "nodemon --inspect app.js -w server -w app.js",
+    "deploy": "now --target production"
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "dotenv": "^8.1.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "@fortawesome/free-brands-svg-icons": "^5.10.2",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@fortawesome/vue-fontawesome": "^0.1.7",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
     "@vue/eslint-config-prettier": "^5.0.0",
+    "axios": "^0.19.0",
     "babel-eslint": "^10.0.1",
+    "bootstrap-vue": "^2.0.0-rc.28",
+    "cheerio": "^1.0.0-rc.3",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.0.0",
+    "koa": "^2.8.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa2-history-api-fallback": "^0.1.0",
+    "nightmare": "^3.0.2",
+    "nodemon": "^1.19.2",
     "prettier": "^1.18.2",
+    "vue-json-excel": "^0.2.98",
     "vue-template-compiler": "^2.6.10"
   }
 }

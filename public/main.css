@@ -1,0 +1,91 @@
+/* Copied from https://www.w3schools.com/css/css_rwd_mediaqueries.asp */
+
+@media only screen and (min-width: 768px) {
+  /* For desktop: */
+  .recol-1 {
+    margin-left: 4.17%;
+    margin-right: 4.17%;
+  }
+  .recol-2 {
+    margin-left: 8.33% !important;
+    margin-right: 8.33% !important;
+  }
+  .recol-3 {
+    margin-left: 12.5% !important;
+    margin-right: 12.5% !important;
+  }
+  .recol-4 {
+    margin-left: 16.66% !important;
+    margin-right: 16.66% !important;
+  }
+  .recol-5 {
+    margin-left: 20.83% !important;
+    margin-right: 20.83% !important;
+  }
+  .recol-6 {
+    margin-left: 25% !important;
+    margin-right: 25% !important;
+  }
+  .recol-7 {
+    margin-left: 29.17% !important;
+    margin-right: 29.17% !important;
+  }
+  .recol-8 {
+    margin-left: 33.33% !important;
+    margin-right: 33.33% !important;
+  }
+  .recol-9 {
+    margin-left: 37.5% !important;
+    margin-right: 37.5% !important;
+  }
+  .recol-10 {
+    margin-left: 41.67% !important;
+    margin-right: 41.67% !important;
+  }
+  .recol-11 {
+    margin-left: 45.83% !important;
+    margin-right: 45.83% !important;
+  }
+  .recol-12 {
+    margin-left: 50% !important;
+    margin-right: 50% !important;
+  }
+}
+
+.bottom-right-button-group {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 35%;
+  /* background: black; */
+  transition: all 0.5s ease-out;
+  clip-path: circle(0 at 0% 0%);
+  -webkit-clip-path: circle(0 at 100% 100%);
+  z-index: 3;
+  /* 保持 show-button 和 hide-button 永远重合 */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.bottom-right-button-group.open {
+  clip-path: circle(170px at 0% 0%);
+  -webkit-clip-path: circle(170% at 100% 100%);
+}
+
+.show-button {
+  z-index: 2;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  /* 保持 show-button 和 hide-button 永远重合 */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.screen-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
