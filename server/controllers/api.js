@@ -61,6 +61,8 @@ const getGrade = async ctx => {
     if (!hasLoggedIn) {
       await page.type('#username', '' + username)
       await page.type('#password', '' + password)
+      // 等待页面中的 js 脚本计算加密后的密码
+      await page.waitFor(1000)
       await page.click('.auth_login_btn')
       // 『成绩查询』按钮
       await page.waitFor('.sm_yy')
