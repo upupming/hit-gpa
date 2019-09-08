@@ -59,8 +59,8 @@ const getGrade = async ctx => {
     })
 
     if (!hasLoggedIn) {
-      await page.type('#username', username)
-      await page.type('#password', password)
+      await page.type('#username', '' + username)
+      await page.type('#password', '' + password)
       await page.click('.auth_login_btn')
       // 『成绩查询』按钮
       await page.waitFor('.sm_yy')
