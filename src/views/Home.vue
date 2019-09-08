@@ -234,13 +234,11 @@
             </b-button>
           </b-col>
           <b-col class="text-right my-2" md="auto">
-            <b-button size="lg" pilled :disabled="selected.length === 0">
+            <b-button size="lg" pilled :disabled="selectedData.length === 0">
               <download-excel
                 :data="selectedData"
                 :fields="excelFields"
                 :name="excelFilename"
-                v-b-tooltip.hover
-                :title="exportInfo"
               >
                 导出已选
               </download-excel>
