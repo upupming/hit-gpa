@@ -29,9 +29,6 @@ app.use(async (ctx, next) => {
 
 app.on('error', function(err, ctx) {
   console.log('server error', err)
-  ctx.body = {
-    success: false
-  }
 })
 
 router.use('/api', api.routes())

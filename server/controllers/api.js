@@ -1,7 +1,14 @@
 const Nightmare = require('nightmare')
+const waitTimeOut = 3000
+const nightmare = Nightmare({
+  waitTimeout: waitTimeOut,
+  openDevTools: false,
+  show: true
+})
 const cheerio = require('cheerio')
 
 function tableToArray(table) {
+  console.log('Got table:\n', table)
   const $ = cheerio.load(table)
   const labels = []
   $('th').each((index, element) => {
@@ -35,18 +42,14 @@ const getGrade = async ctx => {
 
   let gradeTable
 
-  const nightmare = Nightmare({
-    openDevTools: false,
-    show: false
-  })
   await nightmare
-    .viewport(1000, 1000)
     .goto('http://jwes.hit.edu.cn/')
     .click('.login_but')
     .wait('#casLoginForm')
     .type('#username', username)
     .type('#password', password)
     .click('.auth_login_btn')
+    // 『成绩查询』按钮
     .wait('.sm_yy')
     .click('.sm_yy')
     .wait('#pageSize_value')
@@ -57,15 +60,24 @@ const getGrade = async ctx => {
     // 等到最后一个元素加载完毕
     .wait('#setting')
     .evaluate(() => document.querySelector('.list table').outerHTML)
-    .end()
     .then(res => {
       gradeTable = res
+      ctx.body = tableToArray(gradeTable)
     })
     .catch(error => {
       console.error('Search failed:', error)
+      if (
+        error.message ===
+        `.wait() for .sm_yy timed out after ${waitTimeOut}msec`
+      ) {
+        ctx.throw(
+          403,
+          new Error(`用户名或者密码错误，
+        如果确认无误，可能是因为需要输入验证码，
+        暂未实现验证码输入功能。`)
+        )
+      }
     })
-
-  ctx.body = tableToArray(gradeTable)
 }
 
 // const getGrade = ctx => {
