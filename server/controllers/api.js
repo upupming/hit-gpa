@@ -1,5 +1,5 @@
 const Nightmare = require('nightmare')
-const waitTimeOut = 3000
+const waitTimeOut = 10000
 const nightmare = Nightmare({
   waitTimeout: waitTimeOut,
   openDevTools: false,
