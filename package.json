@@ -11,11 +11,6 @@
     "deploy": "now --target production"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
-    "dotenv": "^8.1.0",
-    "vue": "^2.6.10",
-    "vue-router": "^3.0.3",
-    "vuex": "^3.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
     "@fortawesome/free-brands-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
@@ -29,6 +24,8 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "bootstrap-vue": "^2.0.0-rc.28",
     "cheerio": "^1.0.0-rc.3",
+    "core-js": "^2.6.5",
+    "dotenv": "^8.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -42,7 +39,11 @@
     "nightmare": "^3.0.2",
     "nodemon": "^1.19.2",
     "prettier": "^1.18.2",
+    "puppeteer": "^1.19.0",
+    "vue": "^2.6.10",
     "vue-json-excel": "^0.2.98",
-    "vue-template-compiler": "^2.6.10"
+    "vue-router": "^3.0.3",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "^3.0.1"
   }
 }

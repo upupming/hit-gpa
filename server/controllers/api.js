@@ -1,10 +1,6 @@
-const Nightmare = require('nightmare')
-const waitTimeOut = 10000
-const nightmare = Nightmare({
-  waitTimeout: waitTimeOut,
-  openDevTools: false,
-  show: true
-})
+const puppeteer = require('puppeteer')
+let browser
+const waitTimeOut = 3000
 const cheerio = require('cheerio')
 
 function tableToArray(table) {
@@ -40,54 +36,50 @@ const getGrade = async ctx => {
   let { username, password } = ctx.request.body
 
   let gradeTable
-  let hasLoggedIn = false
 
   try {
-    await nightmare
-      // https://github.com/segmentio/nightmare/issues/960
-      // 把 Nightware 的 log 打印到 Koa 服务器中
-      .on('console', (log, msg) => {
-        console.log(msg)
-      })
-      .goto('http://jwes.hit.edu.cn/')
-      .click('.login_but')
-      // 如果之前已经登录过
-      .wait('#casLoginForm,.sm_yy')
-      .evaluate(async () => {
-        // 之前已经登陆过
-        if (document.querySelector('.sm_yy')) {
-          hasLoggedIn = true
-        }
-      })
-
-    // https://github.com/segmentio/nightmare/issues/1085
-    if (!hasLoggedIn) {
-      await nightmare
-        .type('#username', username)
-        .type('#password', password)
-        .click('.auth_login_btn')
-        // 『成绩查询』按钮
-        .wait('.sm_yy')
+    if (!browser) {
+      browser = await puppeteer.launch({ headless: false })
     }
 
-    await nightmare
-      .click('.sm_yy')
-      .wait('#pageSize_value')
-      .type('#pageSize_value', '1000')
-      .type('#pageSize_value', '\u000d')
-      // https://stackoverflow.com/questions/44060214/get-nightmare-to-wait-for-next-page-load-after-clicking-link
-      .wait('tr:nth-child(22)')
-      // 等到最后一个元素加载完毕
-      .wait('#setting')
-      .evaluate(() => document.querySelector('.list table').outerHTML)
-      .then(res => {
-        gradeTable = res
-        ctx.body = tableToArray(gradeTable)
-      })
+    const page = await browser.newPage()
+    page.setDefaultTimeout(waitTimeOut)
+    await page.goto('http://jwes.hit.edu.cn/')
+    await page.click('.login_but')
+    await page.waitFor('#casLoginForm,.sm_yy')
+    const hasLoggedIn = await page.evaluate(() => {
+      // 之前已经登陆过
+      if (document.querySelector('.sm_yy')) {
+        return true
+      }
+      return false
+    })
+
+    if (!hasLoggedIn) {
+      await page.type('#username', username)
+      await page.type('#password', password)
+      await page.click('.auth_login_btn')
+      // 『成绩查询』按钮
+      await page.waitFor('.sm_yy')
+    }
+
+    await page.click('.sm_yy')
+    await page.waitFor('#pageSize_value')
+    await page.type('#pageSize_value', '1000')
+    await page.type('#pageSize_value', '\u000d')
+    // https://stackoverflow.com/questions/44060214/get-nightmare-to-wait-for-next-page-load-after-clicking-link
+    await page.waitFor('tr:nth-child(22)')
+    // 等到最后一个元素加载完毕
+    await page.waitFor('#setting')
+    gradeTable = await page.evaluate(
+      () => document.querySelector('.list table').outerHTML
+    )
+    ctx.body = tableToArray(gradeTable)
   } catch (error) {
     console.log('Nightmare error:', error)
     if (
-      error.message === `.wait() for .sm_yy timed out after ${waitTimeOut}msec`
+      error.message ===
+      `waiting for selector ".sm_yy" failed: timeout ${waitTimeOut}ms exceeded`
     ) {
       ctx.throw(
         403,

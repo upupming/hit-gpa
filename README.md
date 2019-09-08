@@ -87,8 +87,9 @@ POST `/api/grade`
 ### 参考项目
 
 1. Vue & Koa: https://github.com/Molunerfinn/node-github-profile-summary
-2. Nightmare: https://github.com/segmentio/nightmare
-3. Cheerio: https://github.com/cheeriojs/cheerio
+2. https://github.com/GoogleChrome/puppeteer
+3. Nightmare: https://github.com/segmentio/nightmare
+4. Cheerio: https://github.com/cheeriojs/cheerio
 
 ### 参考文章
 
