@@ -37,12 +37,12 @@ const getGrade = async ctx => {
 
   let gradeTable
 
-  try {
-    if (!browser) {
-      browser = await puppeteer.launch({ headless: false })
-    }
+  if (!browser) {
+    browser = await puppeteer.launch({ headless: false })
+  }
 
-    const page = await browser.newPage()
+  const page = await browser.newPage()
+  try {
     page.setDefaultTimeout(waitTimeOut)
     await page.goto('http://jwes.hit.edu.cn/')
     await page.click('.login_but')
@@ -88,6 +88,8 @@ const getGrade = async ctx => {
         暂未实现验证码输入功能。`)
       )
     }
+  } finally {
+    page.close()
   }
 }
 
