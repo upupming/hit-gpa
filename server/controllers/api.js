@@ -8,7 +8,6 @@ const nightmare = Nightmare({
 const cheerio = require('cheerio')
 
 function tableToArray(table) {
-  console.log('Got table:\n', table)
   const $ = cheerio.load(table)
   const labels = []
   $('th').each((index, element) => {
