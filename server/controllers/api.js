@@ -1,10 +1,6 @@
-const Nightmare = require('nightmare')
-const waitTimeOut = 10000
-const nightmare = Nightmare({
-  waitTimeout: waitTimeOut,
-  openDevTools: false,
-  show: true
-})
+const puppeteer = require('puppeteer')
+let browser
+const waitTimeOut = 3000
 const cheerio = require('cheerio')
 
 function tableToArray(table) {
@@ -41,42 +37,58 @@ const getGrade = async ctx => {
 
   let gradeTable
 
-  await nightmare
-    .goto('http://jwes.hit.edu.cn/')
-    .click('.login_but')
-    .wait('#casLoginForm')
-    .type('#username', username)
-    .type('#password', password)
-    .click('.auth_login_btn')
-    // 『成绩查询』按钮
-    .wait('.sm_yy')
-    .click('.sm_yy')
-    .wait('#pageSize_value')
-    .type('#pageSize_value', '1000')
-    .type('#pageSize_value', '\u000d')
-    // https://stackoverflow.com/questions/44060214/get-nightmare-to-wait-for-next-page-load-after-clicking-link
-    .wait('tr:nth-child(22)')
-    // 等到最后一个元素加载完毕
-    .wait('#setting')
-    .evaluate(() => document.querySelector('.list table').outerHTML)
-    .then(res => {
-      gradeTable = res
-      ctx.body = tableToArray(gradeTable)
+  try {
+    if (!browser) {
+      browser = await puppeteer.launch({ headless: false })
+    }
+
+    const page = await browser.newPage()
+    page.setDefaultTimeout(waitTimeOut)
+    await page.goto('http://jwes.hit.edu.cn/')
+    await page.click('.login_but')
+    await page.waitFor('#casLoginForm,.sm_yy')
+    const hasLoggedIn = await page.evaluate(() => {
+      // 之前已经登陆过
+      if (document.querySelector('.sm_yy')) {
+        return true
+      }
+      return false
     })
-    .catch(error => {
-      console.error('Search failed:', error)
-      if (
-        error.message ===
-        `.wait() for .sm_yy timed out after ${waitTimeOut}msec`
-      ) {
-        ctx.throw(
-          403,
-          new Error(`用户名或者密码错误，
+
+    if (!hasLoggedIn) {
+      await page.type('#username', username)
+      await page.type('#password', password)
+      await page.click('.auth_login_btn')
+      // 『成绩查询』按钮
+      await page.waitFor('.sm_yy')
+    }
+
+    await page.click('.sm_yy')
+    await page.waitFor('#pageSize_value')
+    await page.type('#pageSize_value', '1000')
+    await page.type('#pageSize_value', '\u000d')
+    // https://stackoverflow.com/questions/44060214/get-nightmare-to-wait-for-next-page-load-after-clicking-link
+    await page.waitFor('tr:nth-child(22)')
+    // 等到最后一个元素加载完毕
+    await page.waitFor('#setting')
+    gradeTable = await page.evaluate(
+      () => document.querySelector('.list table').outerHTML
+    )
+    ctx.body = tableToArray(gradeTable)
+  } catch (error) {
+    console.log('Nightmare error:', error)
+    if (
+      error.message ===
+      `waiting for selector ".sm_yy" failed: timeout ${waitTimeOut}ms exceeded`
+    ) {
+      ctx.throw(
+        403,
+        new Error(`用户名或者密码错误，
         如果确认无误，可能是因为需要输入验证码，
         暂未实现验证码输入功能。`)
-        )
-      }
-    })
+      )
+    }
+  }
 }
 
 // const getGrade = ctx => {
