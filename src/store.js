@@ -26,11 +26,13 @@ function getAxiosErrMsg(err) {
 export default new Vuex.Store({
   state: {
     user: JSON.parse(localStorage.getItem('user')),
-    gradeData: {}
+    gradeData: []
   },
   mutations: {
     INIT_GRADE_DATA(state) {
-      state.gradeData = []
+      state.gradeData = JSON.parse(
+        localStorage.getItem(`${state.user.username}_gradeData`)
+      )
     },
     SET_USER(state, { username, password }) {
       state.user = {
@@ -41,6 +43,10 @@ export default new Vuex.Store({
     },
     SET_GRADE_DATA(state, gradeData) {
       state.gradeData = gradeData
+      localStorage.setItem(
+        `${state.user.username}_gradeData`,
+        JSON.stringify(gradeData)
+      )
     }
   },
   actions: {
@@ -68,7 +74,7 @@ export default new Vuex.Store({
         如果确认无误，可能是因为需要输入验证码，
         暂未实现验证码输入功能。`
         ) {
-          dispatch('logout')
+          dispatch('logout', 5000)
           msg += '\n 可前往 jwes.hit.edu.cn 手动输入验证码登陆一次再返回使用。'
         }
         bvToast.toast(msg, {
@@ -80,8 +86,8 @@ export default new Vuex.Store({
     },
     async login({ commit }, { username, password, bvToast }) {
       try {
-        commit('INIT_GRADE_DATA')
         commit('SET_USER', { username, password })
+        commit('INIT_GRADE_DATA')
 
         // bvToast.toast(`用户 ${username} 登录成功`, {
         //   title: `登录成功`,
@@ -101,14 +107,14 @@ export default new Vuex.Store({
       }
     },
 
-    logout({ commit }) {
+    logout({ commit }, timeout) {
       // remove user from local storage to log user out
       localStorage.removeItem('user')
       commit('SET_USER', {})
 
       setTimeout(() => {
         router.push('/login')
-      }, 1000)
+      }, timeout || 3000)
     }
   }
 })

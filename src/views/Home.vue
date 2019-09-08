@@ -1,6 +1,6 @@
 <template>
   <div class="home recol-2" style="margin-bottom:300px;">
-    <div class="screen-center" v-if="!gradeData.labels">
+    <div class="screen-center" v-if="!hasGradeData">
       <b-spinner label="正在加载课程信息……"> </b-spinner>
     </div>
     <div v-else>
@@ -253,7 +253,7 @@
       </b-container>
     </div>
     <div
-      :style="`visibility: ${gradeData.labels ? 'visible' : 'hidden'}`"
+      :style="`visibility: ${hasGradeData ? 'visible' : 'hidden'}`"
       class="social-share text-center my-5"
       data-sites="wechat,weibo,qzone,facebook,twitter"
     ></div>
@@ -373,10 +373,16 @@ export default {
           color: 'primary'
         }
       ]
+    },
+    hasGradeData() {
+      return this.gradeData && this.gradeData.labels
     }
   },
-  created() {
-    this.$store.dispatch('getGrade', { bvToast: this.$bvToast })
+  async created() {
+    this.$store.commit('INIT_GRADE_DATA')
+    if (!this.hasGradeData) {
+      this.$store.dispatch('getGrade', { bvToast: this.$bvToast })
+    }
   },
   methods: {
     toggleButtons() {
