@@ -40,43 +40,63 @@ const getGrade = async ctx => {
   let { username, password } = ctx.request.body
 
   let gradeTable
+  let hasLoggedIn = false
 
-  await nightmare
-    .goto('http://jwes.hit.edu.cn/')
-    .click('.login_but')
-    .wait('#casLoginForm')
-    .type('#username', username)
-    .type('#password', password)
-    .click('.auth_login_btn')
-    // 『成绩查询』按钮
-    .wait('.sm_yy')
-    .click('.sm_yy')
-    .wait('#pageSize_value')
-    .type('#pageSize_value', '1000')
-    .type('#pageSize_value', '\u000d')
-    // https://stackoverflow.com/questions/44060214/get-nightmare-to-wait-for-next-page-load-after-clicking-link
-    .wait('tr:nth-child(22)')
-    // 等到最后一个元素加载完毕
-    .wait('#setting')
-    .evaluate(() => document.querySelector('.list table').outerHTML)
-    .then(res => {
-      gradeTable = res
-      ctx.body = tableToArray(gradeTable)
-    })
-    .catch(error => {
-      console.error('Search failed:', error)
-      if (
-        error.message ===
-        `.wait() for .sm_yy timed out after ${waitTimeOut}msec`
-      ) {
-        ctx.throw(
-          403,
-          new Error(`用户名或者密码错误，
+  try {
+    await nightmare
+      // https://github.com/segmentio/nightmare/issues/960
+      // 把 Nightware 的 log 打印到 Koa 服务器中
+      .on('console', (log, msg) => {
+        console.log(msg)
+      })
+      .goto('http://jwes.hit.edu.cn/')
+      .click('.login_but')
+      // 如果之前已经登录过
+      .wait('#casLoginForm,.sm_yy')
+      .evaluate(async () => {
+        // 之前已经登陆过
+        if (document.querySelector('.sm_yy')) {
+          hasLoggedIn = true
+        }
+      })
+
+    // https://github.com/segmentio/nightmare/issues/1085
+    if (!hasLoggedIn) {
+      await nightmare
+        .type('#username', username)
+        .type('#password', password)
+        .click('.auth_login_btn')
+        // 『成绩查询』按钮
+        .wait('.sm_yy')
+    }
+
+    await nightmare
+      .click('.sm_yy')
+      .wait('#pageSize_value')
+      .type('#pageSize_value', '1000')
+      .type('#pageSize_value', '\u000d')
+      // https://stackoverflow.com/questions/44060214/get-nightmare-to-wait-for-next-page-load-after-clicking-link
+      .wait('tr:nth-child(22)')
+      // 等到最后一个元素加载完毕
+      .wait('#setting')
+      .evaluate(() => document.querySelector('.list table').outerHTML)
+      .then(res => {
+        gradeTable = res
+        ctx.body = tableToArray(gradeTable)
+      })
+  } catch (error) {
+    console.log('Nightmare error:', error)
+    if (
+      error.message === `.wait() for .sm_yy timed out after ${waitTimeOut}msec`
+    ) {
+      ctx.throw(
+        403,
+        new Error(`用户名或者密码错误，
         如果确认无误，可能是因为需要输入验证码，
         暂未实现验证码输入功能。`)
-        )
-      }
-    })
+      )
+    }
+  }
 }
 
 // const getGrade = ctx => {
