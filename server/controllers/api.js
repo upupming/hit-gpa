@@ -41,7 +41,10 @@ const getGrade = async ctx => {
     browser = await puppeteer.launch({ headless: false })
   }
 
-  const page = await browser.newPage()
+  // Create a new incognito browser context.
+  const context = await browser.createIncognitoBrowserContext()
+  // Create a new page in a pristine context.
+  const page = await context.newPage()
   try {
     page.setDefaultTimeout(waitTimeOut)
     await page.goto('http://jwes.hit.edu.cn/')
@@ -76,7 +79,7 @@ const getGrade = async ctx => {
     )
     ctx.body = tableToArray(gradeTable)
   } catch (error) {
-    console.log('Nightmare error:', error)
+    console.log('Headless browser error:', error)
     if (
       error.message ===
       `waiting for selector ".sm_yy" failed: timeout ${waitTimeOut}ms exceeded`
