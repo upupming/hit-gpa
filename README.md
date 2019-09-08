@@ -4,11 +4,13 @@
 
 应用网址：https://hit-gpa.upupming.site
 
+:warning: 拉取成绩数据可能需要半分钟到一分钟的时间，请耐心等待。
+
 测试结果：
 
-| [hit-gpa](https://hit-gpa.upupming.site)                                                               | [chasedream GPA 计算器](https://apps.chasedream.com/gpa/#)                                             |
-| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| <img src="https://picgo-1256492673.cos.ap-chengdu.myqcloud.com/img/20190907172053.png" width="1000px"> | <img src="https://picgo-1256492673.cos.ap-chengdu.myqcloud.com/img/20190907172124.png" width="1000px"> |
+| [hit-gpa](https://hit-gpa.upupming.site)     | [chasedream GPA 计算器](https://apps.chasedream.com/gpa/#) |
+| -------------------------------------------- | ---------------------------------------------------------- |
+| <img src="./img/hit-gpa.png" width="1000px"> | <img src="./img/chasedream.png" width="1000px">            |
 
 ## Feature
 
@@ -21,11 +23,33 @@
 
 ```bash
 yarn
+# Koa 开发模式
 yarn start:dev
+# Vue 开发模式
 yarn serve
 ```
 
 打开 http://localhost:8080/
+
+## 项目部署
+
+在服务器中运行 `Nightware` 所依赖的 `Electron` 无头浏览器需要安装 X virtual frame buffer：
+
+```bash
+# https://stackoverflow.com/a/9210912/8242705
+sudo apt-get install xvfb imagemagick
+# https://blog.csdn.net/HelloZEX/article/details/80762705
+sudo apt-get install google-chrome
+```
+
+安装完毕之后，执行：
+
+```bash
+# 构建 Vue
+yarn build
+# 开启 Koa
+xvfb-run --server-args='-screen 0, 1024x768x24' yarn start:dev
+```
 
 ## 开发资源
 
@@ -70,3 +94,4 @@ POST `/api/grade`
 
 1. https://juejin.im/post/5b4f007fe51d4519277b9707
 2. https://medium.com/of-all-things-tech-progress/introduction-to-webcrawling-with-javascript-and-node-js-f5a3798ee8ac
+3. https://stackoverflow.com/questions/9210765/any-way-to-start-google-chrome-in-headless-mode
