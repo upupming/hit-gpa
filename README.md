@@ -2,13 +2,13 @@
 
 > 哈工大本科生 GPA 计算器。使用统一身份一键登录，即可计算自己的 GPA 信息。
 
-应用网址：https://hit-gpa.upupming.site
+应用网址：https://hit-gpa.space-hit.com
 
 :warning: 拉取成绩数据可能需要半分钟到一分钟的时间，请耐心等待。
 
 测试结果：
 
-| [hit-gpa](https://hit-gpa.upupming.site)     | [chasedream GPA 计算器](https://apps.chasedream.com/gpa/#) |
+| [hit-gpa](https://hit-gpa.space-hit.com)     | [chasedream GPA 计算器](https://apps.chasedream.com/gpa/#) |
 | -------------------------------------------- | ---------------------------------------------------------- |
 | <img src="./img/hit-gpa.png" width="1000px"> | <img src="./img/chasedream.png" width="1000px">            |
 
@@ -33,13 +33,11 @@ yarn serve
 
 ## 项目部署
 
-在服务器中运行 `Nightware` 所依赖的 `Electron` 无头浏览器需要安装 X virtual frame buffer：
+在服务器中运行无头浏览器需要安装 X virtual frame buffer：
 
 ```bash
 # https://stackoverflow.com/a/9210912/8242705
 sudo apt-get install xvfb imagemagick
-# https://blog.csdn.net/HelloZEX/article/details/80762705
-sudo apt-get install google-chrome
 ```
 
 安装完毕之后，执行：
@@ -91,7 +89,7 @@ POST `/api/grade`
 ### 参考项目
 
 1. Vue & Koa: https://github.com/Molunerfinn/node-github-profile-summary
-2. https://github.com/GoogleChrome/puppeteer
+2. puppeteer: https://github.com/GoogleChrome/puppeteer
 3. Nightmare: https://github.com/segmentio/nightmare
 4. Cheerio: https://github.com/cheeriojs/cheerio
 
